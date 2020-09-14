@@ -8,50 +8,42 @@ package com.twu.refactoring;
  * 
  */
 public class OrderReceipt {
-    private Order o;
+    private Order order;
 
     public OrderReceipt(Order o) {
-        this.o = o;
+        this.order = o;
 	}
 
 	public String printReceipt() {
 		StringBuilder output = new StringBuilder();
+		final String header="======Printing Orders======\n";
+		output.append(header);
+		printOrder(output);
+		return output.toString();
+	}
 
-		// print headers
-		output.append("======Printing Orders======\n");
+	private void printOrder(StringBuilder output) {
+		output.append(order.getCustomerName());
+		output.append(order.getCustomerAddress());
 
-		// print date, bill no, customer name
-//        output.append("Date - " + order.getDate();
-        output.append(o.getCustomerName());
-        output.append(o.getCustomerAddress());
-//        output.append(order.getCustomerLoyaltyNumber());
-
-		// prints lineItems
 		double totSalesTx = 0d;
 		double tot = 0d;
-		for (LineItem lineItem : o.getLineItems()) {
-			output.append(lineItem.getDescription());
-			output.append('\t');
-			output.append(lineItem.getPrice());
-			output.append('\t');
-			output.append(lineItem.getQuantity());
-			output.append('\t');
-			output.append(lineItem.totalAmount());
-			output.append('\n');
+		for (LineItem lineItem : order.getLineItems()) {
+			output.append(lineItem.getDescription()).append('\t');
+			output.append(lineItem.getPrice()).append('\t');
+			output.append(lineItem.getQuantity()).append('\t');
+			output.append(lineItem.totalAmount()).append('\n');
 
-			// calculate sales tax @ rate of 10%
-            double salesTax = lineItem.totalAmount() * .10;
+			final double taxRate=.10d;
+            double salesTax = lineItem.totalAmount() * taxRate;
             totSalesTx += salesTax;
 
-            // calculate total amount of lineItem = price * quantity + 10 % sales tax
             tot += lineItem.totalAmount() + salesTax;
 		}
 
-		// prints the state tax
-		output.append("Sales Tax").append('\t').append(totSalesTx);
-
-        // print total amount
-		output.append("Total Amount").append('\t').append(tot);
-		return output.toString();
+		final String salesTax="Sales Tax";
+		output.append(salesTax).append('\t').append(totSalesTx);
+		final String totalAmount="Total Amount";
+		output.append(totalAmount).append('\t').append(tot);
 	}
 }
