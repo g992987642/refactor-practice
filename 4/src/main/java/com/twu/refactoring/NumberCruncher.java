@@ -7,35 +7,48 @@ public class NumberCruncher {
         this.numbers = numbers;
     }
 
+    int countEven = -1;
+    int CountOdd = -1;
+    int countPositive = -1;
+    int countNegative = -1;
+
     public int countEven() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 0) count++;
+        if (countEven < 0) {
+            countEven = 0;
+            for (int number : numbers) {
+                if (number % 2 == 0) countEven++;
+            }
         }
-        return count;
+        return countEven;
     }
 
     public int countOdd() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number % 2 == 1) count++;
+        if (CountOdd < 0) {
+            CountOdd = 0;
+            for (int number : numbers) {
+                if (number % 2 == 1) CountOdd++;
+            }
         }
-        return count;
+        return CountOdd;
     }
 
     public int countPositive() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number >= 0) count++;
+        if (countPositive < 0) {
+            countPositive = 0;
+            for (int number : numbers) {
+                if (number >= 0) countPositive++;
+            }
         }
-        return count;
+        return countPositive;
     }
 
     public int countNegative() {
-        int count = 0;
-        for (int number : numbers) {
-            if (number < 0) count++;
+        if (countNegative < 0) {
+            countNegative = 0;
+            for (int number : numbers) {
+                if (number < 0) countNegative++;
+            }
         }
-        return count;
+        return countNegative;
     }
 }
