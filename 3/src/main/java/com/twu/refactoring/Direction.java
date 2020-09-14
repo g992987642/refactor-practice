@@ -1,5 +1,11 @@
 package com.twu.refactoring;
 
+import java.util.HashMap;
+
+/**
+ * TODO
+ * 事实上turnRight和turnLeft还可以合并成一个方法，但是测试中直接调用了这两个方法，就不合并了
+ */
 public class Direction {
     private final char direction;
 
@@ -7,34 +13,41 @@ public class Direction {
         this.direction = direction;
     }
 
+
     public Direction turnRight() {
-        switch (direction) {
-            case 'N':
-                return new Direction('E');
-            case 'S':
-                return new Direction('W');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
+        HashMap<Character, Character> turnRightMap = createTurnRightMap();
+        Character turnRightResult = turnRightMap.get(direction);
+        if (turnRightResult == null) {
+            throw new IllegalArgumentException();
         }
+        return new Direction(turnRightResult);
+
+    }
+
+    public HashMap<Character, Character> createTurnRightMap() {
+        HashMap<Character, Character> turnRightMap = new HashMap<>();
+        turnRightMap.put('N', 'E');
+        turnRightMap.put('S', 'W');
+        turnRightMap.put('E', 'N');
+        turnRightMap.put('W', 'S');
+        return turnRightMap;
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
+        HashMap<Character, Character> turnLeftMap = createTurnLeftMap();
+        Character turnRightResult = turnLeftMap.get(direction);
+        if (turnRightResult == null) {
+            throw new IllegalArgumentException();
         }
+        return new Direction(turnRightResult);
+    }
+    public HashMap<Character, Character> createTurnLeftMap() {
+        HashMap<Character, Character> turnLeftMap = new HashMap<>();
+        turnLeftMap.put('N', 'W');
+        turnLeftMap.put('S', 'E');
+        turnLeftMap.put('E', 'N');
+        turnLeftMap.put('W', 'S');
+        return turnLeftMap;
     }
 
     @Override
