@@ -18,22 +18,27 @@ public class Receipt {
     }
 
     public double getTotalCost() {
-        double totalCost = 0;
-
-        // fixed charges
-        totalCost += FIXED_CHARGE;
-
-        // taxi charges
         int totalKms = taxi.getTotalKms();
         double peakTimeMultiple = taxi.isPeakTime() ? PEAK_TIME_MULTIPLIER : OFF_PEAK_MULTIPLIER;
-        if(taxi.isAirConditioned()) {
-            totalCost += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_AC_RATE * peakTimeMultiple;
-            totalCost += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_AC_RATE * peakTimeMultiple;
-        } else {
-            totalCost += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
-            totalCost += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
-        }
+        boolean isAirConditioned = taxi.isAirConditioned();
+        double milestonesPayment = getMilestonesPayment(totalKms, isAirConditioned, peakTimeMultiple);
+        double totalCost = calculateTotalCost(FIXED_CHARGE, milestonesPayment, SALES_TAX_RATE);
+        return totalCost;
+    }
 
-        return totalCost * (1 + SALES_TAX_RATE);
+    public double getMilestonesPayment(int totalKms, boolean isAirConditioned, double peakTimeMultiple) {
+        double milestonesPayment = 0;
+        if (isAirConditioned) {
+            milestonesPayment += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_AC_RATE * peakTimeMultiple;
+            milestonesPayment += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_AC_RATE * peakTimeMultiple;
+        } else {
+            milestonesPayment += Math.min(RATE_CHANGE_DISTANCE, totalKms) * PRE_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
+            milestonesPayment += Math.max(0, totalKms - RATE_CHANGE_DISTANCE) * POST_RATE_CHANGE_NON_AC_RATE * peakTimeMultiple;
+        }
+        return milestonesPayment;
+    }
+
+    public double calculateTotalCost(int fixedCharge, double milestonesPayment, double salesTaxRate) {
+        return (fixedCharge + milestonesPayment) * (1 + salesTaxRate);
     }
 }
